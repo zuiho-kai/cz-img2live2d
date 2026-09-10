@@ -2,20 +2,21 @@
   "name": "小征",
   "recordedOn": "2026-09-11",
   "source": "https://github.com/zuiho-kai/changzheng",
-  "sourceSnapshot": "simulator/workspace, matches cz-img2live2d v0.1.0 model and runtime",
-  "recording": "changzheng-7d443a0a33",
+  "sourceSnapshot": "2026-09-11 simulator hair revision: two independent back-hair meshes, calibrated angular inertia, garment-only sleeve motion",
+  "recording": "hair-repair-20260911, fixed-step paired rehearsal with recorded PCM input",
   "files": {
-    "index.html": "32a9c9fc8d36b8986efea9344148a03266e109659943bb673acb60a24bb79f66",
+    "index.html": "981128c2951e5ef7ca14bdc7a8224d7357f0f667d2fda520083a632634f3ac7d",
     "model/model.idle.motion3.json": "5c620c75cf5821e84e13fc7faea14a1071d7d1a339b14150518d9a6cbcd0c788",
-    "model/model.moc3": "83d30450199485d9cab547e71ae666da8d1ca3c06c480f2abda5841079aa5ce8",
-    "model/model.model3.json": "43419e3868dd2f03501eda8d43e0e614ad378338132be1695cf107eda78cd835",
+    "model/model.moc3": "635fb6352b1a9b58839968d38e6d8ea433057de02039cf46486d97ea2d33cc77",
+    "model/model.model3.json": "52df67babcdf6c06680017978fa5ab5e5e02765152c2244ac1576292fe84282d",
     "model/expressions/curious.exp3.json": "07f0357751709ebac1a63eaefec556e58e1e8b08f0516a736731f09f5cf9940d",
     "model/expressions/happy.exp3.json": "a4cf01620eba25375b7d4baac623ce559ea063dd7cb4893d6cbf94a2020a0564",
     "model/expressions/serious.exp3.json": "cd53dc415f15a48c591382ca17935d78e7a0c1aa432f1872862bb3cb29552b1c",
     "model/expressions/surprised.exp3.json": "51bac642f5bd9fa5ae4e4c3cf0447c7264a5c9a25ac8de3016036f089d26cb3e",
-    "model/textures/atlas.png": "dc1d8f9c3ecd0fc5851d3396ad156a8f0b6d594116f0dfa0cd501dae145e744a",
+    "model/textures/atlas.png": "d741c773dbc1801817020cb8171780b9afaf1a5379ea61221ba20a7c5cd62773",
+    "model/textures/hair.png": "c1137f1fcaacd422249eda0031631fd8644ca2cda88cc82c0306f87fd1d02fd4",
     "runtime/ANIME25D-LICENSE.txt": "15183bfbec774052a5817a28eb03730c40ec941a642097b597f0c50092594adb",
-    "runtime/avatar-performance.js": "bc18b2d9e1744ba9c58808014728dba660660a046f18a3077a62592e356c7891",
+    "runtime/avatar-performance.js": "7d23c6e447202779493a861a7eb147eea3b07a45acb05c43a264732b6f82a8d6",
     "runtime/secondary-motion.js": "aac8b2d1f23531f75c1c1f5b07f3c5212c14abd995619f7585bd91578968b235"
   }
 }

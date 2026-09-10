@@ -3,7 +3,8 @@
   "FileReferences": {
     "Moc": "model.moc3",
     "Textures": [
-      "textures/atlas.png"
+      "textures/atlas.png",
+      "textures/hair.png"
     ],
     "Motions": {
       "Idle": [

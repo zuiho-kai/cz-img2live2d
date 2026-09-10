@@ -11,9 +11,13 @@ window.cz={ready:false,error:null};
 const app=new PIXI.Application({width:innerWidth,height:innerHeight,backgroundAlpha:0,antialias:true});
 document.body.appendChild(app.view);app.ticker.maxFPS=30;
 const model=await PIXI.live2d.Live2DModel.from('model/model.model3.json',{autoInteract:false});
-app.stage.addChild(model);model.anchor.set(.5,1);
-model.scale.set(Math.min(innerWidth*.9/model.width,innerHeight*.94/model.height));
-model.position.set(innerWidth/2,innerHeight*.98);
+app.stage.addChild(model);
+// Match Changzheng's painted-character framing, excluding transparent padding.
+const original={width:model.width,height:model.height},box={x:130/1254,y:28/1254,w:980/1254,h:1226/1254};
+const scale=Math.min(innerWidth/(original.width*box.w),innerHeight/(original.height*box.h))*.90;
+model.anchor.set(0,0);model.scale.set(scale);
+model.position.set((innerWidth-original.width*box.w*scale)/2-original.width*box.x*scale,
+  innerHeight-original.height*box.h*scale-original.height*box.y*scale);
 const rest={x:model.x,y:model.y},core=model.internalModel.coreModel,performer=new AvatarPerformance(core);
 let mouth=0,last=0,applied={};
 window.cz={ready:true,error:null,setState(s){performer.setState(s);if(s==='listening')performer.notice();},

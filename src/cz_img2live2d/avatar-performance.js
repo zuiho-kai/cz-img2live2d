@@ -37,6 +37,18 @@
       // Restore native vertices before Cubism updates, so held poses never drift.
       const draw=this.core._model.drawables,rects={EyeLeftOpen:[529,302,584,340],EyeRightOpen:[678,302,719,341],EyeLeftSurprised:[529,302,584,340],EyeRightSurprised:[678,302,719,341]};
       const smooth=(a,b,x)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t);};
+      const hairAreas={
+        HairBackLeft:{side:0,x:0,y:330,edge:[[330,480],[450,525],[500,520],[550,458],[650,408],[800,373],[950,327],[1050,270],[1120,220]]},
+        HairBackRight:{side:1,x:-54,y:330,edge:[[330,816],[450,817],[500,829],[550,846],[650,885],[800,916],[950,955],[1050,1003],[1120,1034]]},
+      };
+      const layeredHair=draw.ids.includes('HairBackLeft')&&draw.ids.includes('HairBackRight');
+      const edgeAt=(points,y)=>{
+        for(let i=1;i<points.length;i++)if(y<=points[i][0]){
+          const [y0,x0]=points[i-1],[y1,x1]=points[i];
+          return x0+(x1-x0)*Math.max(0,Math.min(1,(y-y0)/(y1-y0)));
+        }
+        return points[points.length-1][1];
+      };
       const eyes=[], meshes=draw.vertexPositions.map((vertices,index)=>({index,native:new Float32Array(vertices)}));
       draw.ids.forEach((name,index)=>{
         const rect=rects[name];if(!rect)return;
@@ -82,18 +94,33 @@
               const rx=uv[i]*2048,ry=(1-uv[i+1])*2048;
               const side=rx<646?-1:1,shoulder=side<0?left:right;
               const lateral=smooth(55,135,Math.abs(rx-646));
-              const sleeve=lateral*smooth(440,600,ry)*(1-smooth(1030,1240,ry));
+              // The sleeve narrows toward the shoulder. Lateral-only weights
+              // also lift the long hair outside it as if hair were clothing.
+              const sleeveEdge=195+smooth(550,1160,ry)*200;
+              const garment=1-smooth(sleeveEdge-12,sleeveEdge+16,Math.abs(rx-646));
+              const sleeve=lateral*garment*smooth(440,600,ry)*(1-smooth(1030,1240,ry));
               dx+=side*shoulder*42*sleeve*smooth(500,850,ry);
               dy-=shoulder*36*sleeve*(1-smooth(790,1190,ry));
               // The source has no hidden hair backing. Weight only the outer
               // silhouette, outside the sleeves; keep face, collar and scalp fixed.
-              const hairSide=this.hairFollow.sides[side<0?0:1];
-              const boundary=170+smooth(400,1000,ry)*195;
-              const hairWeight=smooth(boundary,boundary+65,Math.abs(rx-646))*smooth(330,690,ry);
-              const tip=smooth(530,1020,ry);
-              const hairDx=(hairSide.x*(1-tip)+hairSide.tipX*tip)*hairWeight;
-              dx+=hairDx;
-              dy+=Math.abs(hairDx)*.08;
+              if(!layeredHair){
+                const hairSide=this.hairFollow.sides[side<0?0:1];
+                const boundary=170+smooth(400,1000,ry)*195;
+                const hairWeight=smooth(boundary,boundary+65,Math.abs(rx-646))*smooth(330,690,ry);
+                const tip=smooth(530,1020,ry);
+                const hairDx=(hairSide.x*(1-tip)+hairSide.tipX*tip)*hairWeight;
+                dx+=hairDx;
+                dy+=Math.abs(hairDx)*.08;
+              }
+            }else if(hairAreas[draw.ids[mesh.index]]){
+              // Hair has its own texture/mesh, so sleeve lifts cannot drag it.
+              // Keep the attachment and the unpainted inner edge stationary.
+              const area=hairAreas[draw.ids[mesh.index]],rx=uv[i]*2048+area.x,ry=(1-uv[i+1])*2048+area.y;
+              const distance=area.side===0?edgeAt(area.edge,ry)-rx:rx-edgeAt(area.edge,ry);
+              const weight=smooth(6,74,distance)*smooth(360,720,ry);
+              const tip=smooth(530,1020,ry),hairSide=this.hairFollow.sides[area.side];
+              dx=(hairSide.x*(1-tip)+hairSide.tipX*tip)*weight;
+              dy=Math.abs(dx)*.08;
             }
             vertices[i]+=dx*2/1254;vertices[i+1]-=dy*2/1254;
           }
@@ -318,7 +345,11 @@
       // after the sentence's own gestures have taken over.
       const curiousIntro=this.expression==='curious'?.2+.8*Math.exp(-Math.max(0,now-this.expressionAt)/850):1;
       this.expressionTilt+=(target.tilt*curiousIntro-this.expressionTilt)*ease;
-      this.hairFollow.update(dt/1000,this.expressionTilt+headTilt,sway,this.pose.pitch);
+      // These parameters are not degrees: the mesh maps +/-30 head units to
+      // +/-20 degrees and +/-30 body units to +/-8 degrees. Feed the physical
+      // angles to inertia, otherwise body motion is exaggerated by 3.75x.
+      const headParameter=Math.max(-30,Math.min(30,this.expressionTilt+headTilt));
+      this.hairFollow.update(dt/1000,headParameter*20/30,sway*8/30,this.pose.pitch);
       const values={
         ParamAngleX:0,ParamAngleY:Math.max(-30,Math.min(30,headBob)),ParamAngleZ:Math.max(-30,Math.min(30,this.expressionTilt+headTilt)),
         ParamBodyAngleX:0,ParamBodyAngleY:0,ParamBodyAngleZ:sway,

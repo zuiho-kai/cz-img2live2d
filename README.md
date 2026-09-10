@@ -8,11 +8,20 @@
 
 ## 先看现在的小征
 
-https://github.com/user-attachments/assets/19cf005a-9c41-4e5d-8a16-b4422963e74a
+https://github.com/user-attachments/assets/af229b80-9fe2-4bbd-8bef-097e669245b3
 
-点击上方播放按钮，可直接在 README 中观看约 32 秒的实际排练。口型由已有录音驱动，视频本身无声音。当前头发和形变仍在修正，模型可运行不代表视觉质量已验收。
+点击上方播放按钮，直接观看默认模型的连续排练。v0.1.1 已修正发梢过强惯性与耸肩牵动长发，并将左右外侧长发拆成独立网格。口型由已有录音驱动，录像本身无声音。
 
-[下载默认 Live2D](https://github.com/zuiho-kai/cz-img2live2d/releases/download/v0.1.0/changzheng-default-live2d.zip) · [模型文件与本地预览说明](examples/default-live2d/README.md)
+<details>
+<summary>展开播放：头发修正前后对照（30 秒，同动作、同取景）</summary>
+
+https://github.com/user-attachments/assets/945c4bcf-a7e9-4d1c-9396-fbb937d17981
+
+两侧的头部、身体和肩膀轨迹相同，检查长发是否被衣服拉动、是否撞限位后突停。当前仍是正面参考模型，本次修复不等于整体视觉质量已获认可。
+
+</details>
+
+[下载默认 Live2D](https://github.com/zuiho-kai/cz-img2live2d/releases/download/v0.1.1/changzheng-default-live2d.zip) · [模型文件与本地预览说明](examples/default-live2d/README.md)
 
 仓库默认参考模型就是这个小征，位于 `examples/default-live2d/`。MOC3、贴图、表情、待机动作和配套 JS 驱动均已提供，可以先运行它熟悉流程，再准备自己的角色。网页预览需自行准备 Cubism 运行库；无需先安装制作引擎。
 
@@ -83,6 +92,6 @@ cz-img2live2d build --project work/character --backend puppetloom
 - [使用指南](USAGE.md)：完整安装、补件中转、精调、排练和导出命令。
 - [实测记录](ACCEPTANCE.md)：两个 PSD 样例、小征模板、安装与重建测试，以及尚未验证的部分。
 - [依赖与许可](THIRD_PARTY.md)：上游来源、锁定版本和许可说明。
-- [下载首版安装包](https://github.com/zuiho-kai/cz-img2live2d/releases/tag/v0.1.0)：GitHub Release 提供 wheel 和源码包，尚未发布到 PyPI。
+- [下载安装包 v0.1.1](https://github.com/zuiho-kai/cz-img2live2d/releases/tag/v0.1.1)：GitHub Release 提供 wheel 和源码包，尚未发布到 PyPI。
 
 已完成的排练使用真实录音数据驱动口型，并保存连续画面；录像本身没有声音。两份 PSD 样例和专用模板的成功不代表所有角色都可用，动画自然度仍需要看实际效果。

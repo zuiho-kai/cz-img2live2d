@@ -1,0 +1,35 @@
+{
+  "version": "0.1.1",
+  "date": "2026-09-11",
+  "scope": "specific hair defects and playback controls; not overall artistic acceptance",
+  "visualAcceptance": "not_granted",
+  "pairedControlTrajectoriesIdentical": true,
+  "pairedRehearsal": {
+    "errors": [],
+    "checks": {
+      "before": {
+        "peakHair": 38,
+        "clampedFrames": 236,
+        "mouthPeak": 1.0000001192092896,
+        "mouthStopped": 0,
+        "contextLost": false
+      },
+      "after": {
+        "peakHair": 26.800017770772392,
+        "clampedFrames": 0,
+        "mouthPeak": 1.0000001192092896,
+        "mouthStopped": 0,
+        "contextLost": false
+      }
+    },
+    "frames": 901
+  },
+  "meshIsolationPixels": {
+    "hairMeshes": 2,
+    "hairMoves": 38.00000113248825,
+    "hairDoesNotMoveOtherMeshes": 0,
+    "shoulderDoesNotMoveHair": 0,
+    "repeatedUpdateDrift": 0
+  },
+  "defaultMocSha256": "635fb6352b1a9b58839968d38e6d8ea433057de02039cf46486d97ea2d33cc77"
+}

@@ -74,8 +74,26 @@ def main():
     clean[:, :, 0][edge] = np.maximum(clean[:, :, 0][edge], clean[:, :, 1][edge] * .98)
     clean[:, :, 2][edge] = np.maximum(clean[:, :, 2][edge], clean[:, :, 1][edge] * .98)
     base = Image.fromarray(np.dstack([clean, alpha * 255]).astype('uint8'), 'RGBA')
+    # Separate the two visible back-hair silhouettes from the sleeves. These
+    # boundaries describe this artwork only. The original pixels are preserved;
+    # no hidden-body artwork is invented. Motion tapers to zero at the cut edge.
+    hair_edges = {
+        'HairBackLeft': [(330,480),(450,525),(500,520),(550,458),(650,408),(800,373),(950,327),(1050,270),(1120,220)],
+        'HairBackRight': [(330,816),(450,817),(500,829),(550,846),(650,885),(800,916),(950,955),(1050,1003),(1120,1034)],
+    }
+    yy, xx = np.mgrid[:SIZE, :SIZE]
+    hair_masks = {}
+    for name, points in hair_edges.items():
+        edge_x = np.interp(yy, [p[0] for p in points], [p[1] for p in points])
+        side = xx < edge_x if name == 'HairBackLeft' else xx > edge_x
+        hair_masks[name] = side & (yy >= 330) & (yy < 1120)
+    original = base.copy()
+    body_pixels = np.array(base)
+    body_pixels[:, :, 3][hair_masks['HairBackLeft'] | hair_masks['HairBackRight']] = 0
+    base = Image.fromarray(body_pixels, 'RGBA')
     atlas = Image.new('RGBA', (2048, 2048))
     atlas.paste(base, (0, 0))
+    hair_atlas = Image.new('RGBA', (2048, 2048))
     params = [EmitParam(k, -30, 30, 0, [-30, 0, 30]) for k in ('ParamAngleX','ParamAngleY','ParamAngleZ')]
     params += [EmitParam('ParamBreath', 0, 1, 0, [0, 1]), EmitParam('ParamHairSway', -1, 1, 0, [-1, 0, 1]),
                EmitParam('ParamEyeLOpen', 0, 1.25, 1, [0, .4, 1, 1.25]), EmitParam('ParamEyeROpen', 0, 1.25, 1, [0, .4, 1, 1.25]),
@@ -92,7 +110,7 @@ def main():
     meshes, parts, specs = [], [], []
     packed_x = 0
 
-    def mesh(name, rect, placement, step, affect, kind='', control=None):
+    def mesh(name, rect, placement, step, affect, kind='', control=None, texture_index=0):
         x0,y0,x1,y1 = rect
         cols, rows = max(2, math.ceil((x1-x0)/step)), max(2, math.ceil((y1-y0)/step))
         points = [(x0+(x1-x0)*i/cols, y0+(y1-y0)*j/rows) for j in range(rows+1) for i in range(cols+1)]
@@ -129,9 +147,17 @@ def main():
             elif kind == 'mouth_closed': opacity = max(0, 1-v/.25)
             keys.append(positions);opacities.append(opacity)
         parts.append(EmitPart(name, 100+len(parts)*10))
-        meshes.append(EmitMesh(name,len(parts)-1,0,uv,triangles,affect,keys,opacities))
+        meshes.append(EmitMesh(name,len(parts)-1,texture_index,uv,triangles,affect,keys,opacities))
         specs.append({'id':name,'rect':rect,'vertices':len(points),'controls':[params[i].id for i in affect]})
 
+    for name, rect, placement in [('HairBackLeft',(0,330,646,1120),(0,0)),
+                                   ('HairBackRight',(646,330,SIZE,1120),(700,0))]:
+        mask = Image.fromarray((hair_masks[name] * 255).astype('uint8')).filter(ImageFilter.MaxFilter(7))
+        pixels = np.array(original)
+        pixels[:, :, 3] = np.minimum(pixels[:, :, 3], np.array(mask))
+        cut = Image.fromarray(pixels, 'RGBA').crop(rect)
+        hair_atlas.paste(cut, placement)
+        mesh(name, rect, placement, 20, [1,2,3,15], texture_index=1)
     mesh('BodyHeadSkin', (0,0,SIZE,SIZE), (0,0), 28, [1,2,3,4,15])
     # Viewer-left/right feature coordinates picked directly from the full-resolution drawing.
     patches = [
@@ -158,9 +184,10 @@ def main():
         if kind == 'brow': local += [9,11] if name == 'BrowLeft' else [10,12]
         mesh(name,rect,placement,9,[1,2,3,15]+local,kind,control)
     atlas.save(OUT/'textures/atlas.png')
+    hair_atlas.save(OUT/'textures/hair.png')
     canvas={'pixelsPerUnit':SIZE/2,'originX':SIZE/2,'originY':SIZE/2,'width':SIZE,'height':SIZE,'flags':0}
     (OUT/'model.moc3').write_bytes(write_moc3(build_moc3(canvas,params,parts,meshes)))
-    model={'Version':3,'FileReferences':{'Moc':'model.moc3','Textures':['textures/atlas.png'],
+    model={'Version':3,'FileReferences':{'Moc':'model.moc3','Textures':['textures/atlas.png','textures/hair.png'],
            'Motions':{'Idle':[{'File':'model.idle.motion3.json'}]}},
            'Groups':[{'Target':'Parameter','Name':'EyeBlink','Ids':['ParamEyeLOpen','ParamEyeROpen']},
                      {'Target':'Parameter','Name':'LipSync','Ids':['ParamMouthOpenY']} ]}
@@ -183,6 +210,7 @@ def main():
         model['FileReferences']['Expressions'].append({'Name':name,'File':path})
     (OUT/'model.model3.json').write_text(json.dumps(model,indent=2))
     (OUT/'rig-source.json').write_text(json.dumps({'canvas':SIZE,'neck_pivot':[646,510],
+        'hair_edges':hair_edges,'hair_motion':'independent back-hair meshes; pinned inner edges; runtime inertia',
         'neck_blend_y':[440,585],'hair_tip_region_y':[460,1050],
         'yaw_enabled':False,'gaze_driver':'avatar-performance.js runtime iris deformation',
         'performance':'frontal expressions, independent gaze and upper body rise','parts':specs},indent=2))

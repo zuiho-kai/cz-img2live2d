@@ -1,16 +1,17 @@
 # 默认 Live2D：小征
 
-这是当前小征的参考模型，随仓库提供。可以先用它看效果、熟悉文件结构和动作驱动，再换成自己的角色。模型和配套脚本与首页演示录像使用的版本一致。
+这是当前小征的参考模型，随仓库提供。可以先用它看效果、熟悉文件结构和动作驱动，再换成自己的角色。v0.1.1 将左右外侧长发分成独立网格，修正过强惯性和耸肩牵动头发的问题；模型和配套脚本与首页演示录像使用的版本一致。
 
 ## 文件
 
 - `model/model.model3.json`：模型入口，引用 MOC3、贴图、表情和待机动作。
 - `model/model.moc3`：运行时模型；不是 Cubism 编辑器的 `.cmo3` 工程。
+- `model/textures/hair.png`：从原画保留的左右外侧长发；与身体分开绑定，内侧边缘固定以避免露出未绘制区域。
 - `runtime/`：小征的待机、状态、口型与发梢驱动。
 - `index.html`：直接加载这个默认模型的预览页。
 - `provenance.json`：来源、录像标识和文件 SHA-256。
 
-只下载模型时，可用 [默认模型 ZIP](https://github.com/zuiho-kai/cz-img2live2d/releases/download/v0.1.0/changzheng-default-live2d.zip)。ZIP 与本目录内容相同，不含预览依赖。
+只下载模型时，可用 [默认模型 ZIP](https://github.com/zuiho-kai/cz-img2live2d/releases/download/v0.1.1/changzheng-default-live2d.zip)。ZIP 与本目录内容相同，不含预览依赖。
 
 ## 本地看效果
 
@@ -37,6 +38,6 @@ python -m http.server 17875 --bind 127.0.0.1
 
 ## 参考范围
 
-这是已有小征素材制作的正面表情模型，适合参考眨眼、嘴型、身体与头发跟随，以及状态和语音如何接入。它不代表任意图片都可以自动达到同样效果，也不包含通用大角度转头绑定。
+这是已有小征素材制作的正面表情参考模型，适合检查眨眼、嘴型、身体与头发跟随，以及状态和语音如何接入。本轮只修正已复现的头发问题；没有把所有头发拆成逐束绑定，也没有增加大角度转头。模型质量仍需按具体用途看连续画面判断，不能把加载或口型检查当成整体视觉验收。
 
 角色模型作为本项目的默认参考样例提供；上游代码来源和许可见 [THIRD_PARTY.md](https://github.com/zuiho-kai/cz-img2live2d/blob/main/THIRD_PARTY.md)，运行脚本内保留 Anime2.5DRig 的许可说明。Python wheel 不附带角色模型，请克隆仓库或下载上述 ZIP。
