@@ -11,3 +11,4 @@ dist/
 local-engines.json
 .env
 .env.*
+examples/default-live2d/vendor/

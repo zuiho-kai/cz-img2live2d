@@ -20,6 +20,8 @@
 
 ## 实际画面与证据
 
+后续展示补充：当前小征的 [20 秒 GIF](docs/media/changzheng-demo.gif)、[完整 MP4](https://github.com/zuiho-kai/cz-img2live2d/releases/download/v0.1.0/changzheng-demo.mp4) 和 [默认参考模型](examples/default-live2d/README.md) 已随仓库展示。新整理的默认预览在 17874 隔离目录实际加载通过，无 page error；实际张嘴图层不透明度从 1 回到 0，张嘴和停止截图已检查。下方原始详细报告仍保留在开发机。
+
 本机总入口：排练录像（长征开发机：`artifacts/runtime-cz-img2live2d/review.html`）。本节的录像和报告保留在开发机，未上传仓库或安装包，所列路径仅用于在原开发机定位证据。以下均在 17874 模拟器独立子目录实录，使用 Chromium SwiftShader；不是桌面 GPU 性能测试。
 
 - 小征：报告（长征开发机：`artifacts/runtime-cz-img2live2d/changzheng/reviews/changzheng-7d443a0a33/report.json`）。约 30 秒状态与 PCM 排练，参数响应/停止归零通过。序列抽帧可见张嘴、身体/头发跟随；没有在这些抽帧中看到此前那种脸突然放大。

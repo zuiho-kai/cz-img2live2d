@@ -6,6 +6,16 @@
 
 当前是 **v0.1 实验版**：已有分层素材可以构建、编辑、预览和导出原生项目。只有一张平面图时，还需要调用方 agent 使用自己的工具完成分层和补图；任意角色直接导出可用 Cubism 模型的整条流程尚未验证。
 
+## 先看现在的小征
+
+![小征 Live2D 实际排练：表情、口型和身体跟随](docs/media/changzheng-demo.gif)
+
+当前小征模型的实际浏览器录像，GIF 节选 20 秒。口型由已有录音驱动，画面可见说话和停止后的变化；GIF 和视频均无声音。
+
+[观看完整视频（约 32 秒）](https://github.com/zuiho-kai/cz-img2live2d/releases/download/v0.1.0/changzheng-demo.mp4) · [下载默认 Live2D](https://github.com/zuiho-kai/cz-img2live2d/releases/download/v0.1.0/changzheng-default-live2d.zip) · [模型文件与本地预览说明](examples/default-live2d/README.md)
+
+仓库默认参考模型就是这个小征，位于 `examples/default-live2d/`。MOC3、贴图、表情、待机动作和配套 JS 驱动均已提供，可以先运行它熟悉流程，再准备自己的角色。网页预览需自行准备 Cubism 运行库；无需先安装制作引擎。
+
 ## 背景：有了角色图，离“活起来”还有多远？
 
 做桌宠或直播助手时，画出一个喜欢的角色只是开始。接下来还要拆分头发、眼睛和嘴，补出被遮住的部分，设置哪些地方能动，再让眨眼、口型和身体动作配合起来。
