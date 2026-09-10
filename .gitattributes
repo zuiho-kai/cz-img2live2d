@@ -1,1 +1,3 @@
 * text=auto eol=lf
+examples/default-live2d/model/** -text
+examples/default-live2d/runtime/** -text
