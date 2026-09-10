@@ -8,11 +8,11 @@
 
 ## 先看现在的小征
 
-![小征 Live2D 实际排练：表情、口型和身体跟随](docs/media/changzheng-demo.gif)
+https://github.com/user-attachments/assets/19cf005a-9c41-4e5d-8a16-b4422963e74a
 
-当前小征模型的实际浏览器录像，GIF 节选 20 秒。口型由已有录音驱动，画面可见说话和停止后的变化；GIF 和视频均无声音。
+点击上方播放按钮，可直接在 README 中观看约 32 秒的实际排练。口型由已有录音驱动，视频本身无声音。当前头发和形变仍在修正，模型可运行不代表视觉质量已验收。
 
-[观看完整视频（约 32 秒）](https://github.com/zuiho-kai/cz-img2live2d/releases/download/v0.1.0/changzheng-demo.mp4) · [下载默认 Live2D](https://github.com/zuiho-kai/cz-img2live2d/releases/download/v0.1.0/changzheng-default-live2d.zip) · [模型文件与本地预览说明](examples/default-live2d/README.md)
+[下载默认 Live2D](https://github.com/zuiho-kai/cz-img2live2d/releases/download/v0.1.0/changzheng-default-live2d.zip) · [模型文件与本地预览说明](examples/default-live2d/README.md)
 
 仓库默认参考模型就是这个小征，位于 `examples/default-live2d/`。MOC3、贴图、表情、待机动作和配套 JS 驱动均已提供，可以先运行它熟悉流程，再准备自己的角色。网页预览需自行准备 Cubism 运行库；无需先安装制作引擎。
 
