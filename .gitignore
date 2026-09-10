@@ -1,0 +1,13 @@
+*.egg-info/
+build/
+.deps/
+work/
+
+deps/
+.venv/
+__pycache__/
+.pytest_cache/
+dist/
+local-engines.json
+.env
+.env.*
